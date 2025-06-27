@@ -1,3 +1,4 @@
+// Simple parrot chatbot implementation used by indexParrot.html
 // The chatbot object
 const chatbot = {
     name: "Parrot",
@@ -17,7 +18,10 @@ const chatbot = {
 const inputEl = document.getElementById("input");
 const outputEl = document.getElementById("output");
 
-// automatically scroll to the bottom of the chatbot
+// Reference to the "Send" button
+const sendBtn = document.querySelector('.send-button');
+
+// Automatically scroll to the bottom of the chatbot
 const chatbotContainer = document.getElementById("chatbot-container");
 
 // Add an event listener to the input element to listen for user input
@@ -34,8 +38,8 @@ sendBtn.addEventListener("click", function () {
 });
 
 function sendMessage() {
-    // Get the user's input
-    const userInput = inputEl.value;
+    // Trim the user's input to remove surrounding whitespace
+    const userInput = inputEl.value.trim();
 
     // If the user's input is empty, return without sending the message
     if (!userInput) {
@@ -45,23 +49,26 @@ function sendMessage() {
     // Clear the input element
     inputEl.value = "";
 
-    // Append the user's input to the output element
-    outputEl.innerHTML += "<p><strong class='blue-text'>You:</strong> " + userInput + "</p>";
+    // Create paragraph element for the user's message
+    const userMsg = document.createElement('p');
+    userMsg.innerHTML = `<strong class='blue-text'>You:</strong> ${userInput}`;
+    outputEl.appendChild(userMsg);
 
-    // Append the "Parrot is typing" message
-    outputEl.innerHTML += "<p><strong>Parrot:</strong> Parrot is typing...</p>";
+    // Create a placeholder for Parrot's response
+    const parrotMsg = document.createElement('p');
+    parrotMsg.innerHTML = "<strong>Parrot:</strong> Parrot is typing...";
+    outputEl.appendChild(parrotMsg);
 
     // Scroll to the bottom of the chatbot container
     chatbotContainer.scrollTop = chatbotContainer.scrollHeight;
 
-    // Delay for 2 seconds before generating the chatbot's response
+    // Delay for 1 second before generating the chatbot's response
     setTimeout(() => {
         // Generate a response from the chatbot
         const chatbotResponse = chatbot.reply(userInput);
 
-        // Replace the "Parrot is typing" message with the chatbot's response
-        outputEl.innerHTML = outputEl.innerHTML.replace("<p><strong>Parrot:</strong> Parrot is typing...</p>", "<p><strong>Parrot:</strong> " + chatbotResponse + "</p>");
-
+        // Update the placeholder with the chatbot's response
+        parrotMsg.innerHTML = `<strong>Parrot:</strong> ${chatbotResponse}`;
 
         // Scroll to the bottom of the chatbot container
         chatbotContainer.scrollTop = chatbotContainer.scrollHeight;
